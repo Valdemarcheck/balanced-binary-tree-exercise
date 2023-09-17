@@ -25,8 +25,8 @@ class Node {
 
 class Tree {
   constructor(array) {
-    const sortedArray = removeDuplicates(array).sort((a, b) => a - b);
-    this.root = this.#buildTree(sortedArray);
+    const preparedArray = removeDuplicates(array).sort((a, b) => a - b);
+    this.root = this.#buildTree(preparedArray);
   }
 
   #buildTree(array) {
@@ -37,11 +37,34 @@ class Tree {
     const root = new Node(array[mid]);
 
     root.left = this.#buildTree(array.slice(0, mid));
-    root.right = this.#buildTree(array.slice(mid));
+    root.right = this.#buildTree(array.slice(mid + 1));
 
     return root;
   }
+
+  insert(value) {
+    let currentNode = this.root;
+
+    while (true) {
+      if (value < currentNode.value) {
+        if (currentNode.left) {
+          currentNode = currentNode.left;
+        } else {
+          currentNode.left = new Node(value);
+          break;
+        }
+      } else {
+        if (currentNode.right) {
+          currentNode = currentNode.right;
+        } else {
+          currentNode.right = new Node(value);
+          break;
+        }
+      }
+    }
+  }
 }
 
-const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+const tree = new Tree([1, 2, 3, 4]);
+tree.insert(10);
 prettyPrint(tree.root);
