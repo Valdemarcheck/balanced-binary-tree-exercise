@@ -174,9 +174,32 @@ class Tree {
     }
     return currentNode;
   }
+
+  levelOrderIterative(callback = null) {
+    const queue = [this.root];
+    const values = [];
+    const callbackProvided = callback !== null;
+
+    while (queue.length > 0) {
+      const firstQueueElement = queue[0];
+
+      if (firstQueueElement.left) {
+        queue.push(firstQueueElement.left);
+      }
+      if (firstQueueElement.right) {
+        queue.push(firstQueueElement.right);
+      }
+
+      if (callbackProvided) {
+        values.push(callback(firstQueueElement.value));
+      } else {
+        values.push(firstQueueElement.value);
+      }
+      queue.shift();
+    }
+    return values;
+  }
 }
 
 const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-prettyPrint(tree.root);
-tree.delete(7);
 prettyPrint(tree.root);
