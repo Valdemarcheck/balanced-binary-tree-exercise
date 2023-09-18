@@ -51,14 +51,18 @@ class Tree {
 
     while (true) {
       if (value < currentNode.value) {
-        if (currentNode.left) {
+        const hasLeftLeaf = currentNode.left !== null;
+
+        if (hasLeftLeaf) {
           currentNode = currentNode.left;
         } else {
           currentNode.left = new Node(value);
           break;
         }
       } else {
-        if (currentNode.right) {
+        const hasRightLeaf = currentNode.right !== null;
+
+        if (hasRightLeaf) {
           currentNode = currentNode.right;
         } else {
           currentNode.right = new Node(value);
@@ -68,29 +72,97 @@ class Tree {
     }
   }
 
-  //   delete(value) {
-  //     let firstNode = null;
-  //     let secondNode = null;
-  //     let currentNode = this.root;
-  //     while (nextNode.value !== value) {
-  //       secondNode = currentNode;
-  //       currentNode = this.#getNextNode(currentNode, value);
-  //     }
+  #getAmountOfLeaves(node) {
+    let amount = 0;
+    if (node.left) amount++;
+    if (node.right) amount++;
+    return amount;
+  }
 
-  //     if (!currentNode.left && !currentNode.right) {
-  //       if (value > secondNode.value) {
-  //         secondNode.right = null;
-  //       } else {
-  //         secondNode.left = null;
-  //       }
-  //       return;
-  //     }
-  //     if (!nextNode.left || !nextNode.right) {
-  //       console.log("Has one child");
-  //       currentNode.nextNode = nextNode.nextNode;
-  //       return;
-  //     }
-  //   }
+  #deleteLeaflessNode({ value, parentNode }) {
+    if (value < parentNode.value) {
+      parentNode.left = null;
+    } else {
+      parentNode.right = null;
+    }
+  }
+
+  #deleteNodeWithOneLeaf({ value, parentNode, currentNode }) {
+    const childNode =
+      value < currentNode.value ? currentNode.left : currentNode.right;
+    if (currentNode.value < parentNode.value) {
+      parentNode.left = childNode;
+    } else {
+      parentNode.right = childNode;
+    }
+  }
+
+  #deleteNodeWithTwoLeafs({ value, queue, currentNode }) {
+    let smallestRightNodeParent = currentNode;
+    let smallestRightNode = currentNode.right;
+    let smallestRightNodeWasFound = false;
+
+    while (!smallestRightNodeWasFound) {
+      if (smallestRightNode.left) {
+        smallestRightNodeParent = smallestRightNode;
+        smallestRightNode = smallestRightNode.left;
+      } else {
+        smallestRightNodeWasFound = true;
+      }
+    }
+
+    const amountOfLeavesOnSmallestRightNode =
+      this.#getAmountOfLeaves(smallestRightNode);
+
+    if (amountOfLeavesOnSmallestRightNode === 0) {
+      this.#deleteLeaflessNode({
+        parentNode: smallestRightNodeParent,
+        value,
+      });
+    } else {
+      this.#deleteNodeWithOneLeaf({
+        parentNode: smallestRightNodeParent,
+        currentNode: smallestRightNode,
+        value: value,
+      });
+    }
+    currentNode.value = smallestRightNode.value;
+  }
+
+  delete(value) {
+    let nodeWasDeleted = false;
+    const queue = [];
+    queue.push(this.root);
+
+    while (!nodeWasDeleted) {
+      const currentNode = queue[queue.length - 1];
+      const doesNodeWithValueExist = currentNode !== null;
+
+      if (!doesNodeWithValueExist) break;
+
+      if (value < currentNode.value) {
+        queue.push(currentNode.left);
+      } else if (value > currentNode.value) {
+        queue.push(currentNode.right);
+      } else {
+        const parentNode = queue[queue.length - 2];
+        let amountOfLeaves = this.#getAmountOfLeaves(currentNode);
+
+        switch (amountOfLeaves) {
+          case 0:
+            this.#deleteLeaflessNode({ value, parentNode });
+            break;
+          case 1:
+            this.#deleteNodeWithOneLeaf({ value, parentNode, currentNode });
+            break;
+          default:
+            this.#deleteNodeWithTwoLeafs({ value, queue, currentNode });
+        }
+
+        nodeWasDeleted = true;
+      }
+    }
+  }
 
   find(value) {
     let currentNode = this.root;
@@ -104,6 +176,7 @@ class Tree {
   }
 }
 
-const tree = new Tree([1, 2, 3, 4]);
-console.log(tree.find(3));
+const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+prettyPrint(tree.root);
+tree.delete(7);
 prettyPrint(tree.root);
