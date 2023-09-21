@@ -16,6 +16,7 @@ function removeDuplicates(array) {
 }
 
 function getArrayMaxValue(array) {
+  if (array.length === 1) return array[0];
   return array.sort((a, b) => a - b)[array.length - 1];
 }
 
@@ -284,6 +285,7 @@ class Tree {
   }
 
   height(node = this.root) {
+    if (!node) return 0;
     if (this.#getAmountOfLeaves(node) === 0) {
       return 1;
     } else {
@@ -310,12 +312,25 @@ class Tree {
       steps++;
     }
   }
+
+  isBalanced(node = this.root) {
+    if (!node || this.#getAmountOfLeaves(node) === 0) return true;
+    return (
+      Math.abs(this.height(node.left) - this.height(node.right)) <= 1 &&
+      this.isBalanced(node.left) &&
+      this.isBalanced(node.right)
+    );
+  }
 }
 
 function debugSquare(value) {
   return value * value;
 }
 
-const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+const tree = new Tree([0]);
+tree.insert(1);
+tree.insert(2);
+tree.insert(-1);
+tree.insert(3);
 prettyPrint(tree.root, "|");
-console.log(tree.depth());
+console.log(tree.isBalanced());
