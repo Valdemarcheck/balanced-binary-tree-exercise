@@ -15,6 +15,10 @@ function removeDuplicates(array) {
   return [...new Set(array)];
 }
 
+function getArrayMaxValue(array) {
+  return array.sort((a, b) => a - b)[array.length - 1];
+}
+
 class Node {
   constructor(value) {
     this.value = value;
@@ -200,7 +204,7 @@ class Tree {
     return values;
   }
 
-  inorder({ cb = null, node = this.root }) {
+  inorder({ cb = null, node }) {
     let resultArray = [];
 
     if (cb) {
@@ -225,7 +229,7 @@ class Tree {
     return resultArray;
   }
 
-  preorder({ cb = null, node = this.root }) {
+  preorder({ cb = null, node }) {
     let resultArray = [];
 
     if (cb) {
@@ -252,7 +256,7 @@ class Tree {
     return resultArray;
   }
 
-  postorder({ cb = null, node = this.root }) {
+  postorder({ cb = null, node }) {
     let resultArray = [];
 
     if (cb) {
@@ -278,11 +282,27 @@ class Tree {
     }
     return resultArray;
   }
+
+  height(node = this.root) {
+    if (this.#getAmountOfLeaves(node) === 0) {
+      return 1;
+    } else {
+      const childrenHeights = [];
+      if (node.left) {
+        childrenHeights.push(1 + this.height(node.left));
+      }
+      if (node.right) {
+        childrenHeights.push(1 + this.height(node.right));
+      }
+      return getArrayMaxValue(childrenHeights);
+    }
+  }
 }
 
 function debugSquare(value) {
   return value * value;
 }
 
-const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 prettyPrint(tree.root, "|");
+console.log(tree.height());
