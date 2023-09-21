@@ -297,6 +297,19 @@ class Tree {
       return getArrayMaxValue(childrenHeights);
     }
   }
+
+  depth(node) {
+    let currentNode = this.root;
+    let steps = 1;
+
+    while (true) {
+      if (currentNode.value === node.value) {
+        return steps;
+      }
+      currentNode = this.#getNextNode(currentNode, node.value);
+      steps++;
+    }
+  }
 }
 
 function debugSquare(value) {
@@ -305,4 +318,4 @@ function debugSquare(value) {
 
 const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 prettyPrint(tree.root, "|");
-console.log(tree.height());
+console.log(tree.depth());
