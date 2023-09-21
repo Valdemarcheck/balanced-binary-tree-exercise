@@ -20,6 +20,14 @@ function getArrayMaxValue(array) {
   return array.sort((a, b) => a - b)[array.length - 1];
 }
 
+function getHundredRandomNumbersArray(baseValue = 0) {
+  const numbersArray = [];
+  for (let i = 0; i < 100; i++) {
+    numbersArray.push(Math.floor(baseValue + Math.random() * 100));
+  }
+  return numbersArray;
+}
+
 class Node {
   constructor(value) {
     this.value = value;
@@ -205,7 +213,7 @@ class Tree {
     return values;
   }
 
-  inorder({ cb = null, node }) {
+  inorder({ cb = null, node = this.root }) {
     let resultArray = [];
 
     if (cb) {
@@ -230,7 +238,7 @@ class Tree {
     return resultArray;
   }
 
-  preorder({ cb = null, node }) {
+  preorder({ cb = null, node = this.root }) {
     let resultArray = [];
 
     if (cb) {
@@ -257,7 +265,7 @@ class Tree {
     return resultArray;
   }
 
-  postorder({ cb = null, node }) {
+  postorder({ cb = null, node = this.root }) {
     let resultArray = [];
 
     if (cb) {
@@ -326,3 +334,25 @@ class Tree {
     this.root = this.#buildTree(this.inorder({ node: this.root }));
   }
 }
+
+(() => {
+  const array = getHundredRandomNumbersArray();
+  const tree = new Tree(array);
+  console.log(tree.isBalanced());
+  console.log(tree.preorder({}));
+  console.log(tree.inorder({}));
+  console.log(tree.postorder({}));
+
+  const newArray = getHundredRandomNumbersArray(100);
+  for (let number of newArray) {
+    tree.insert(number);
+  }
+  console.log(tree.isBalanced());
+  tree.rebalance();
+  console.log(tree.isBalanced());
+  console.log(tree.preorder({}));
+  console.log(tree.inorder({}));
+  console.log(tree.postorder({}));
+
+  prettyPrint(tree.root);
+})();
