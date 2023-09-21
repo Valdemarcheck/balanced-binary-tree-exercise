@@ -200,98 +200,81 @@ class Tree {
     return values;
   }
 
-  inorder({ cb = null, node = null }) {
-    const currentNode = node || this.root;
+  inorder({ cb = null, node = this.root }) {
     let resultArray = [];
 
     if (cb) {
-      if (currentNode.left) {
-        resultArray = resultArray.concat(
-          this.inorder({ cb, node: currentNode.left })
-        );
+      if (node.left) {
+        resultArray = resultArray.concat(this.inorder({ cb, node: node.left }));
       }
-      resultArray.push(cb(currentNode.value));
-      if (currentNode.right) {
+      resultArray.push(cb(node.value));
+      if (node.right) {
         resultArray = resultArray.concat(
-          this.inorder({ cb, node: currentNode.right })
+          this.inorder({ cb, node: node.right })
         );
       }
     } else {
-      if (currentNode.left) {
-        resultArray = resultArray.concat(
-          this.inorder({ node: currentNode.left })
-        );
+      if (node.left) {
+        resultArray = resultArray.concat(this.inorder({ node: node.left }));
       }
-      resultArray.push(currentNode.value);
-      if (currentNode.right) {
-        resultArray = resultArray.concat(
-          this.inorder({ node: currentNode.right })
-        );
+      resultArray.push(node.value);
+      if (node.right) {
+        resultArray = resultArray.concat(this.inorder({ node: node.right }));
       }
     }
     return resultArray;
   }
 
-  preorder({ cb = null, node = null }) {
-    const currentNode = node || this.root;
+  preorder({ cb = null, node = this.root }) {
     let resultArray = [];
 
     if (cb) {
-      resultArray.push(cb(currentNode.value));
-      if (currentNode.left) {
+      resultArray.push(cb(node.value));
+      if (node.left) {
         resultArray = resultArray.concat(
-          this.preorder({ cb, node: currentNode.left })
+          this.preorder({ cb, node: node.left })
         );
       }
-      if (currentNode.right) {
+      if (node.right) {
         resultArray = resultArray.concat(
-          this.preorder({ cb, node: currentNode.right })
+          this.preorder({ cb, node: node.right })
         );
       }
     } else {
-      resultArray.push(currentNode.value);
-      if (currentNode.left) {
-        resultArray = resultArray.concat(
-          this.preorder({ node: currentNode.left })
-        );
+      resultArray.push(node.value);
+      if (node.left) {
+        resultArray = resultArray.concat(this.preorder({ node: node.left }));
       }
-      if (currentNode.right) {
-        resultArray = resultArray.concat(
-          this.preorder({ node: currentNode.right })
-        );
+      if (node.right) {
+        resultArray = resultArray.concat(this.preorder({ node: node.right }));
       }
     }
     return resultArray;
   }
 
-  postorder({ cb = null, node = null }) {
-    const currentNode = node || this.root;
+  postorder({ cb = null, node = this.root }) {
     let resultArray = [];
 
     if (cb) {
-      if (currentNode.left) {
+      if (node.left) {
         resultArray = resultArray.concat(
-          this.postorder({ cb, node: currentNode.left })
+          this.postorder({ cb, node: node.left })
         );
       }
-      if (currentNode.right) {
+      if (node.right) {
         resultArray = resultArray.concat(
-          this.postorder({ cb, node: currentNode.right })
+          this.postorder({ cb, node: node.right })
         );
       }
-      resultArray.push(cb(currentNode.value));
+      resultArray.push(cb(node.value));
     } else {
-      if (currentNode.left) {
-        resultArray = resultArray.concat(
-          this.postorder({ node: currentNode.left })
-        );
+      if (node.left) {
+        resultArray = resultArray.concat(this.postorder({ node: node.left }));
       }
-      if (currentNode.right) {
-        resultArray = resultArray.concat(
-          this.postorder({ node: currentNode.right })
-        );
+      if (node.right) {
+        resultArray = resultArray.concat(this.postorder({ node: node.right }));
       }
-      resultArray.push(currentNode.value);
+      resultArray.push(node.value);
     }
     return resultArray;
   }
@@ -302,4 +285,4 @@ function debugSquare(value) {
 }
 
 const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-prettyPrint(tree.root);
+prettyPrint(tree.root, "|");
