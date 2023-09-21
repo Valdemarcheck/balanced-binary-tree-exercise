@@ -321,16 +321,8 @@ class Tree {
       this.isBalanced(node.right)
     );
   }
-}
 
-function debugSquare(value) {
-  return value * value;
+  rebalance() {
+    this.root = this.#buildTree(this.inorder({ node: this.root }));
+  }
 }
-
-const tree = new Tree([0]);
-tree.insert(1);
-tree.insert(2);
-tree.insert(-1);
-tree.insert(3);
-prettyPrint(tree.root, "|");
-console.log(tree.isBalanced());
