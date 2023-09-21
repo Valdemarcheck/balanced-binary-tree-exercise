@@ -199,6 +199,106 @@ class Tree {
     }
     return values;
   }
+
+  inorder({ cb = null, node = null }) {
+    const currentNode = node || this.root;
+    let resultArray = [];
+
+    if (cb) {
+      if (currentNode.left) {
+        resultArray = resultArray.concat(
+          this.inorder({ cb, node: currentNode.left })
+        );
+      }
+      resultArray.push(cb(currentNode.value));
+      if (currentNode.right) {
+        resultArray = resultArray.concat(
+          this.inorder({ cb, node: currentNode.right })
+        );
+      }
+    } else {
+      if (currentNode.left) {
+        resultArray = resultArray.concat(
+          this.inorder({ node: currentNode.left })
+        );
+      }
+      resultArray.push(currentNode.value);
+      if (currentNode.right) {
+        resultArray = resultArray.concat(
+          this.inorder({ node: currentNode.right })
+        );
+      }
+    }
+    return resultArray;
+  }
+
+  preorder({ cb = null, node = null }) {
+    const currentNode = node || this.root;
+    let resultArray = [];
+
+    if (cb) {
+      resultArray.push(cb(currentNode.value));
+      if (currentNode.left) {
+        resultArray = resultArray.concat(
+          this.preorder({ cb, node: currentNode.left })
+        );
+      }
+      if (currentNode.right) {
+        resultArray = resultArray.concat(
+          this.preorder({ cb, node: currentNode.right })
+        );
+      }
+    } else {
+      resultArray.push(currentNode.value);
+      if (currentNode.left) {
+        resultArray = resultArray.concat(
+          this.preorder({ node: currentNode.left })
+        );
+      }
+      if (currentNode.right) {
+        resultArray = resultArray.concat(
+          this.preorder({ node: currentNode.right })
+        );
+      }
+    }
+    return resultArray;
+  }
+
+  postorder({ cb = null, node = null }) {
+    const currentNode = node || this.root;
+    let resultArray = [];
+
+    if (cb) {
+      if (currentNode.left) {
+        resultArray = resultArray.concat(
+          this.postorder({ cb, node: currentNode.left })
+        );
+      }
+      if (currentNode.right) {
+        resultArray = resultArray.concat(
+          this.postorder({ cb, node: currentNode.right })
+        );
+      }
+      resultArray.push(cb(currentNode.value));
+    } else {
+      if (currentNode.left) {
+        resultArray = resultArray.concat(
+          this.postorder({ node: currentNode.left })
+        );
+      }
+      if (currentNode.right) {
+        resultArray = resultArray.concat(
+          this.postorder({ node: currentNode.right })
+        );
+      }
+      resultArray.push(currentNode.value);
+    }
+    return resultArray;
+  }
+}
+
+function debugSquare(value) {
+  return value * value;
 }
 
 const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
