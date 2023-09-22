@@ -366,24 +366,24 @@ class Tree {
   }
 }
 
-// (() => {
-//   const array = getHundredRandomNumbersArray();
-//   const tree = new Tree(array);
-//   console.log(tree.isBalanced());
-//   console.log(tree.preorder({}));
-//   console.log(tree.inorder({}));
-//   console.log(tree.postorder({}));
+(() => {
+  const array = getHundredRandomNumbersArray();
+  const tree = new Tree(array);
+  console.log(tree.isBalanced());
+  console.log(tree.preorder({}));
+  console.log(tree.inorder({}));
+  console.log(tree.postorder({}));
 
-//   const newArray = getHundredRandomNumbersArray(100);
-//   for (let number of newArray) {
-//     tree.insert(number);
-//   }
-//   console.log(tree.isBalanced());
-//   tree.rebalance();
-//   console.log(tree.isBalanced());
-//   console.log(tree.preorder({}));
-//   console.log(tree.inorder({}));
-//   console.log(tree.postorder({}));
+  const newArray = getHundredRandomNumbersArray(100);
+  for (let number of newArray) {
+    tree.insert(number);
+  }
+  console.log(tree.isBalanced());
+  tree.rebalance();
+  console.log(tree.isBalanced());
+  console.log(tree.preorder({}));
+  console.log(tree.inorder({}));
+  console.log(tree.postorder({}));
 
-//   prettyPrint(tree.root);
-// })();
+  prettyPrint(tree.root);
+})();
