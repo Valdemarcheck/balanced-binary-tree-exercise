@@ -17,7 +17,7 @@ function removeDuplicates(array) {
 
 function getArrayMaxValue(array) {
   if (array.length === 1) return array[0];
-  return array.sort((a, b) => a - b)[array.length - 1];
+  return mergeSort(array)[array.length - 1];
 }
 
 function getHundredRandomNumbersArray(baseValue = 0) {
@@ -26,6 +26,37 @@ function getHundredRandomNumbersArray(baseValue = 0) {
     numbersArray.push(Math.floor(baseValue + Math.random() * 100));
   }
   return numbersArray;
+}
+
+function mergeSort(array) {
+  if (array.length === 0) return [];
+  if (array.length === 1) return array;
+
+  const middle = Math.ceil((array.length - 1) / 2);
+  const left = array.slice(0, middle);
+  const right = array.slice(middle);
+
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+  const sorted = [];
+
+  while (true) {
+    if (left[0] === undefined && right[0] === undefined) break;
+    if (left[0] === undefined) {
+      sorted.push(right.shift());
+    } else if (right[0] === undefined) {
+      sorted.push(left.shift());
+    } else {
+      if (left[0] > right[0]) {
+        sorted.push(right.shift());
+      } else {
+        sorted.push(left.shift());
+      }
+    }
+  }
+  return sorted;
 }
 
 class Node {
@@ -38,7 +69,7 @@ class Node {
 
 class Tree {
   constructor(array) {
-    const preparedArray = removeDuplicates(array).sort((a, b) => a - b);
+    const preparedArray = mergeSort(removeDuplicates(array));
     this.root = this.#buildTree(preparedArray);
   }
 
@@ -335,24 +366,24 @@ class Tree {
   }
 }
 
-(() => {
-  const array = getHundredRandomNumbersArray();
-  const tree = new Tree(array);
-  console.log(tree.isBalanced());
-  console.log(tree.preorder({}));
-  console.log(tree.inorder({}));
-  console.log(tree.postorder({}));
+// (() => {
+//   const array = getHundredRandomNumbersArray();
+//   const tree = new Tree(array);
+//   console.log(tree.isBalanced());
+//   console.log(tree.preorder({}));
+//   console.log(tree.inorder({}));
+//   console.log(tree.postorder({}));
 
-  const newArray = getHundredRandomNumbersArray(100);
-  for (let number of newArray) {
-    tree.insert(number);
-  }
-  console.log(tree.isBalanced());
-  tree.rebalance();
-  console.log(tree.isBalanced());
-  console.log(tree.preorder({}));
-  console.log(tree.inorder({}));
-  console.log(tree.postorder({}));
+//   const newArray = getHundredRandomNumbersArray(100);
+//   for (let number of newArray) {
+//     tree.insert(number);
+//   }
+//   console.log(tree.isBalanced());
+//   tree.rebalance();
+//   console.log(tree.isBalanced());
+//   console.log(tree.preorder({}));
+//   console.log(tree.inorder({}));
+//   console.log(tree.postorder({}));
 
-  prettyPrint(tree.root);
-})();
+//   prettyPrint(tree.root);
+// })();
