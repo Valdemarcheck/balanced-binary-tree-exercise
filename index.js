@@ -244,6 +244,26 @@ class Tree {
     return values;
   }
 
+  levelOrderRecursive(cb = null, queue = [this.root], results = []) {
+    if (queue.length === 0) return results;
+
+    const currentNode = queue.shift();
+    if (cb) {
+      results.push(cb(currentNode.value));
+    } else {
+      results.push(currentNode.value);
+    }
+
+    if (currentNode.left) {
+      queue.push(currentNode.left);
+    }
+    if (currentNode.right) {
+      queue.push(currentNode.right);
+    }
+
+    return this.levelOrderRecursive(cb, queue, results);
+  }
+
   inorder({ cb = null, node = this.root }) {
     let resultArray = [];
 
