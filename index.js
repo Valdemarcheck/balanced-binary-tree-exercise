@@ -16,8 +16,13 @@ function removeDuplicates(array) {
 }
 
 function getArrayMaxValue(array) {
-  if (array.length === 1) return array[0];
-  return mergeSort(array)[array.length - 1];
+  let max = array[0];
+  for (let i = 1; i < array.length; i++) {
+    if (array[i] > max) {
+      max = array[i];
+    }
+  }
+  return max;
 }
 
 function getHundredRandomNumbersArray(baseValue = 0) {
